@@ -13,6 +13,14 @@ interface TableProps {
 }
 
 export function Table({ jsonData }: TableProps) {
+	// optionally access the underlying virtualizer instance
+	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(
+		null
+	);
+
+	const [isLoading, setIsLoading] = useState(true);
+	const [sorting, setSorting] = useState<MRT_SortingState>([]);
+
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => {
 			if (jsonData.length === 0) {
@@ -29,14 +37,6 @@ export function Table({ jsonData }: TableProps) {
 		},
 		[jsonData]
 	);
-
-	// optionally access the underlying virtualizer instance
-	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(
-		null
-	);
-
-	const [isLoading, setIsLoading] = useState(true);
-	const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
 	useEffect(() => {
 		if (jsonData.length > 0) {

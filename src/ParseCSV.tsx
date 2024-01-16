@@ -10,7 +10,7 @@ interface PropsParseCSV {
  * @param props onLoad a Callback function called when the JSON is loaded
  * @returns A drag & drop area where we can upload our excel file
  */
-export function ParseCSV(props: PropsParseCSV): JSX.Element { 
+export function ParseCSV(props: PropsParseCSV): JSX.Element {
 
 	const [fileLoad, setFileLoad] = useState<boolean>(false);
 
@@ -50,14 +50,16 @@ export function ParseCSV(props: PropsParseCSV): JSX.Element {
 	};
 
 	return (
-		<div onDrop={handleDrop} onDragOver={handleDragOver}>
-			<h1>CSV to JSON Converter</h1>
+		<div onDrop={handleDrop} onDragOver={handleDragOver} style={{ padding: "20px", border: "2px dashed green", textAlign: "center" }}>
+
 			{fileLoad ? (
 				<div>
 					<h2>Fichier CSV Chargées avec succès !</h2>
 				</div>
 			) : (
-				<p>Drop a CSV file here to convert to JSON.</p>
+				<div>
+					<h2>Glissez déposer votre fichier CSV</h2>
+				</div>
 			)}
 		</div>
 	);
