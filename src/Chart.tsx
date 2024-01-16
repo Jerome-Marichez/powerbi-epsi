@@ -1,6 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, CartesianGrid, YAxis, LineChart, Tooltip, Line } from 'recharts';
-
+import { BarChart, Bar, CartesianGrid, YAxis, Tooltip } from 'recharts';
 
 interface IChartProps {
 	data: any[];
@@ -21,7 +20,9 @@ export function Chart({ data }: IChartProps): JSX.Element {
 
 				if (!isNaN(numericValue)) {
 					if (key in result) {
-						result[key].push({ valeur: obj[key] });
+						result[key].push(
+							{ valeur: obj[key] }
+						);
 					} else {
 						result[key] = [{ valeur: obj[key] }];
 					}
@@ -40,21 +41,27 @@ export function Chart({ data }: IChartProps): JSX.Element {
 
 	const backtoArray: [string, any[]][] = Object.entries(accumulatedResult);
 
-	backtoArray.forEach(([key, value]) => {value.sort((a, b) => a.valeur - b.valeur);});
+	backtoArray.forEach(([key, value]) => { value.sort((a, b) => a.valeur - b.valeur); });
 
 	return (
 		<>
-			{backtoArray.map(([key, value], index) => (
-				<div key={index} style={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center", justifyContent: "space-around"}}>
-					<h2>{key}</h2>
-					<BarChart width={1200} height={400} data={value as any[]}>
-						<Bar dataKey="valeur" fill="lightgreen" />
-						<CartesianGrid stroke="#ccc" />
-						<Tooltip />
-						<YAxis />
-					</BarChart>
-				</div>
-			))}
+			{backtoArray.map(([key, value], index) => {
+				// Find the middle element in the array
+				const middleIndex = Math.floor(value.length / 2);
+				const middleValue = value[middleIndex]?.valeur;
+
+				return (
+					<div key={index} style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", justifyContent: "space-around" }}>
+						<h2>{key} - Valeur à 50%: <span style={{backgroundColor: "lightgrey", padding:"10px", borderRadius: "50px"}}>{middleValue}</span></h2>
+						<BarChart width={1200} height={400} data={value as any[]}>
+							<Bar dataKey="valeur" fill="lightgreen" />
+							<CartesianGrid stroke="#ccc" />
+							<Tooltip />
+							<YAxis />
+						</BarChart>
+					</div>
+				);
+			})}
 		</>
 	);
 }
