@@ -3,12 +3,12 @@ import Papa from 'papaparse';
 
 
 interface PropsParseCSV {
-	onDataLoad: React.Dispatch<React.SetStateAction<any>>;
+	onDataLoad: React.Dispatch<React.SetStateAction<any[] | boolean>>;
 }
 
 /**
  * @param props onLoad a Callback function called when the JSON is loaded
- * @returns A drag & drop area where we can upload our excel file
+ * @returns A drag & drop area where we can upload our CSV file
  */
 export function ParseCSV(props: PropsParseCSV): JSX.Element {
 

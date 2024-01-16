@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Table from './Table';
+import React, { useState, useRef} from 'react';
+import { TableMemorized } from './Table';
 import { ParseCSV } from './ParseCSV';
 import './App.css'; // Import the loader CSS
 
@@ -8,6 +8,7 @@ function App() {
   const [jsonData, setJsonData] = useState<any>(null);
   const [jsonFiltered, setJsonFiltered] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const ref = useRef(); 
 
   console.log(jsonData);
 
@@ -25,7 +26,7 @@ function App() {
           <div className="loader"></div>
         </div>
       ) : jsonData ? (
-        <Table jsonData={jsonData} />
+          <TableMemorized jsonData={jsonData}/>
       ) : (
         <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
           Pas de données disponible.

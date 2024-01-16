@@ -1,5 +1,5 @@
 // Table.js
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
 	MaterialReactTable,
 	useMaterialReactTable,
@@ -13,13 +13,17 @@ interface TableProps {
 }
 
 export function Table({ jsonData }: TableProps) {
+
+
+	const [isLoading, setIsLoading] = useState(true);
+	const [sorting, setSorting] = useState<MRT_SortingState>([]);
+
+	console.log(sorting);
+
 	// optionally access the underlying virtualizer instance
 	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(
 		null
 	);
-
-	const [isLoading, setIsLoading] = useState(true);
-	const [sorting, setSorting] = useState<MRT_SortingState>([]);
 
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => {
@@ -67,13 +71,25 @@ export function Table({ jsonData }: TableProps) {
 		enableRowVirtualization: true,
 		muiTableContainerProps: { sx: { maxHeight: '600px' } },
 		onSortingChange: setSorting,
-		state: { isLoading, sorting },
+		state: { isLoading, sorting, },
 		rowVirtualizerInstanceRef, // optional
 		rowVirtualizerOptions: { overscan: 5 }, // optionally customize the row virtualizer
 		columnVirtualizerOptions: { overscan: 2 }, // optionally customize the column virtualizer
 	});
+	const rows = table.getFilteredRowModel().flatRows;
+	console.log(rows);
+
+	const onlyRows = rows.map((v) => v.original);
+	
+	console.log(onlyRows);
+
+	
+
+
+	
 
 	return <MaterialReactTable table={table} />;
 }
 
-export default Table;
+export const TableMemorized = React.memo(Table); 
+
