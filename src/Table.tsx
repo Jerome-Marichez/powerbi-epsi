@@ -8,18 +8,16 @@ import {
 	type MRT_Virtualizer,
 } from 'material-react-table';
 
-interface TableProps {
-	jsonData: any[]; // Change the type based on your data structure
+interface ITableProps {
+	jsonData: any[]; // The original jsonData
+	filteredJSON: any; // The updated filteredJSON
 }
 
-export function Table({ jsonData }: TableProps) {
+export function Table({ jsonData, filteredJSON }: ITableProps): JSX.Element {
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [sorting, setSorting] = useState<MRT_SortingState>([]);
-	const [columnVisibility, setColumnVisibility] = React.useState({})
 
-
-	console.log(sorting);
 
 	// optionally access the underlying virtualizer instance
 	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(
@@ -72,18 +70,16 @@ export function Table({ jsonData }: TableProps) {
 		enableRowVirtualization: true,
 		muiTableContainerProps: { sx: { maxHeight: '600px' } },
 		onSortingChange: setSorting,
-		state: { isLoading, sorting, },
+		state: { isLoading, sorting },
 		rowVirtualizerInstanceRef, // optional
 		rowVirtualizerOptions: { overscan: 5 }, // optionally customize the row virtualizer
 		columnVirtualizerOptions: { overscan: 2 }, // optionally customize the column virtualizer
 	});
 	const rowsFiltered = table.getFilteredRowModel().flatRows.map((v) => v.original);
-	console.log(rowsFiltered);
+	filteredJSON(rowsFiltered);
 
-	const columnFiltered = table.getIsAllColumnsVisible;
-	console.log(columnFiltered);
 
-	console.log('test', table.getIsAllColumnsVisible);
+
 	return <MaterialReactTable table={table} />;
 }
 

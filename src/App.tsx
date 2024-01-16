@@ -1,19 +1,28 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { TableMemorized } from './Table';
 import { ParseCSV } from './ParseCSV';
-import './App.css'; // Import the loader CSS
+import { Chart } from './Chart';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
-function App() {
+import './App.css';
+
+function App(): JSX.Element {
   const [jsonData, setJsonData] = useState<any>(null);
   const [jsonFiltered, setJsonFiltered] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(jsonData);
+  useEffect(() => {
+    if (jsonData) {
+      // Update jsonFiltered state after jsonData is set
+      setJsonFiltered(jsonData);
+      setLoading(false); // Set loading to false once data is loaded
+    }
+  }, [jsonData]);
 
   const handleDataLoad = (data: any) => {
     setJsonData(data);
-    setLoading(false); // Set loading to false once data is loaded
+    // Do not setLoading(false) here, it will be done in the useEffect
   };
 
   return (
@@ -25,7 +34,10 @@ function App() {
           <div className="loader"></div>
         </div>
       ) : jsonData ? (
-          <TableMemorized jsonData={jsonData}/>
+        <>
+          <TableMemorized jsonData={jsonData} filteredJSON={setJsonFiltered} />
+          <Chart data={jsonFiltered} />
+        </>
       ) : (
         <h2 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
           Pas de données disponible.
