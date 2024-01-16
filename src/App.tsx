@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { TableMemorized } from './Table';
 import { ParseCSV } from './ParseCSV';
 import { Chart } from './Chart';
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
 import './App.css';
@@ -15,6 +14,7 @@ function App(): JSX.Element {
   useEffect(() => {
     if (jsonData) {
       // Update jsonFiltered state after jsonData is set
+      console.log(jsonData);
       setJsonFiltered(jsonData);
       setLoading(false); // Set loading to false once data is loaded
     }

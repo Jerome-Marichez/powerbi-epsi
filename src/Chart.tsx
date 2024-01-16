@@ -1,5 +1,6 @@
 import React from 'react';
-import { BarChart, Bar, CartesianGrid, YAxis } from 'recharts';
+import { BarChart, Bar, CartesianGrid, YAxis, LineChart, Tooltip, Line } from 'recharts';
+
 
 interface IChartProps {
 	data: any[];
@@ -16,10 +17,14 @@ export function Chart({ data }: IChartProps): JSX.Element {
 
 		originalArray.forEach((obj) => {
 			for (const key in obj) {
-				if (key in result) {
-					result[key].push({ uv: obj[key] });
-				} else {
-					result[key] = [{ uv: obj[key] }];
+				const numericValue = parseFloat(obj[key]);
+
+				if (!isNaN(numericValue)) {
+					if (key in result) {
+						result[key].push({ valeur: obj[key] });
+					} else {
+						result[key] = [{ valeur: obj[key] }];
+					}
 				}
 			}
 		});
@@ -33,18 +38,19 @@ export function Chart({ data }: IChartProps): JSX.Element {
 	// Print the result
 	console.log(accumulatedResult);
 
-	const backtoArray = Object.entries(accumulatedResult);
+	const backtoArray: [string, any[]][] = Object.entries(accumulatedResult);
 
-
+	backtoArray.forEach(([key, value]) => {value.sort((a, b) => a.valeur - b.valeur);});
 
 	return (
 		<>
 			{backtoArray.map(([key, value], index) => (
-				<div key={index}>
+				<div key={index} style={{display: "flex", flexDirection: "column", width: "100%", alignItems: "center", justifyContent: "space-around"}}>
 					<h2>{key}</h2>
-					<BarChart width={600} height={600} data={value as any[]}>
-						<Bar dataKey="uv" fill="lightgreen" />
+					<BarChart width={1200} height={400} data={value as any[]}>
+						<Bar dataKey="valeur" fill="lightgreen" />
 						<CartesianGrid stroke="#ccc" />
+						<Tooltip />
 						<YAxis />
 					</BarChart>
 				</div>
