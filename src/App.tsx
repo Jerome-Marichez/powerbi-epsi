@@ -1,4 +1,4 @@
-import React, { useState, useRef} from 'react';
+import React, { useState} from 'react';
 import { TableMemorized } from './Table';
 import { ParseCSV } from './ParseCSV';
 import './App.css'; // Import the loader CSS
@@ -8,7 +8,6 @@ function App() {
   const [jsonData, setJsonData] = useState<any>(null);
   const [jsonFiltered, setJsonFiltered] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const ref = useRef(); 
 
   console.log(jsonData);
 
