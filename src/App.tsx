@@ -15,10 +15,10 @@ function App(): JSX.Element {
     if (jsonData) {
       // Update jsonFiltered state after jsonData is set
       console.log(jsonData);
-      setJsonFiltered(jsonData);
+      setJsonFiltered(jsonFiltered);
       setLoading(false); // Set loading to false once data is loaded
     }
-  }, [jsonData]);
+  }, [jsonData, jsonFiltered]);
 
   const handleDataLoad = (data: any) => {
     setJsonData(data);

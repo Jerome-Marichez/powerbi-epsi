@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 
-interface PropsParseCSV {
-	onDataLoad: React.Dispatch<React.SetStateAction<any[] | boolean>>;
+interface ParseCSVProps {
+	onDataLoad: React.Dispatch<React.SetStateAction<{ [key: string]: string }[] | boolean>>;
 }
 
-export function ParseCSV(props: PropsParseCSV): JSX.Element {
+/**
+ * 
+ * @params A callback who update a state in the main parent
+ * @returns A parse CSV drag & drop area who convert CSV to JSON
+ */
+export function ParseCSV(props: ParseCSVProps): JSX.Element {
 	const [fileLoad, setFileLoad] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -51,7 +56,7 @@ export function ParseCSV(props: PropsParseCSV): JSX.Element {
 				header: false,
 			});
 		} else {
-			setErrorMessage('Fichier au mauvais format 🤬, veuillez choisir un fichier CSV');
+			setErrorMessage('Fichier au mauvais format 🤬, veuillez rééssayer en rafraichissant la page');
 		}
 	};
 

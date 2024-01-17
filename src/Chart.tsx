@@ -5,6 +5,10 @@ interface IChartProps {
 	data: any[];
 }
 
+/**
+ * 
+ * @returns A List of charts for each data providen
+ */
 export function Chart({ data }: IChartProps): JSX.Element {
 	if (!data || data.length === 0) {
 		// Handle empty data or null/undefined cases

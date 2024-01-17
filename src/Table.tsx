@@ -1,4 +1,3 @@
-// Table.js
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
 	MaterialReactTable,
@@ -8,21 +7,37 @@ import {
 	type MRT_Virtualizer,
 } from 'material-react-table';
 
-interface ITableProps {
-	jsonData: any[]; // The original jsonData
-	filteredJSON: any; // The updated filteredJSON
+interface TableProps {
+	jsonData: { [key: string]: string }[];
+	filteredJSON: (data: { [key: string]: string }[]) => void;
 }
 
-export function Table({ jsonData, filteredJSON }: ITableProps): JSX.Element {
-
+/**
+ * @param jsonData A data set 
+ * @param filteredJSON A function which will update the data with the filter apply
+ * @returns A instance of Tanstack
+ */
+const Table: React.FC<TableProps> = ({ jsonData, filteredJSON }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [sorting, setSorting] = useState<MRT_SortingState>([]);
+	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(null);
 
+	const ROW_VIRTUALIZER_OPTIONS = { overscan: 5 };
+	const COLUMN_VIRTUALIZER_OPTIONS = { overscan: 2 };
 
-	// optionally access the underlying virtualizer instance
-	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(
-		null
-	);
+	useEffect(() => {
+		if (jsonData.length > 0) {
+			setIsLoading(false);
+		}
+	}, [jsonData]);
+
+	useEffect(() => {
+		try {
+			rowVirtualizerInstanceRef.current?.scrollToIndex?.(0);
+		} catch (error) {
+			console.error(error);
+		}
+	}, [sorting]);
 
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => {
@@ -30,7 +45,6 @@ export function Table({ jsonData, filteredJSON }: ITableProps): JSX.Element {
 				return [];
 			}
 
-			// Extracting columns dynamically from the keys of the first item
 			const keys = Object.keys(jsonData[0]);
 
 			return keys.map((key) => ({
@@ -40,21 +54,6 @@ export function Table({ jsonData, filteredJSON }: ITableProps): JSX.Element {
 		},
 		[jsonData]
 	);
-
-	useEffect(() => {
-		if (jsonData.length > 0) {
-			setIsLoading(false);
-		}
-	}, [jsonData]);
-
-	useEffect(() => {
-		// scroll to the top of the table when the sorting changes
-		try {
-			rowVirtualizerInstanceRef.current?.scrollToIndex?.(0);
-		} catch (error) {
-			console.error(error);
-		}
-	}, [sorting]);
 
 	const table = useMaterialReactTable({
 		columns,
@@ -71,17 +70,15 @@ export function Table({ jsonData, filteredJSON }: ITableProps): JSX.Element {
 		muiTableContainerProps: { sx: { maxHeight: '600px' } },
 		onSortingChange: setSorting,
 		state: { isLoading, sorting },
-		rowVirtualizerInstanceRef, // optional
-		rowVirtualizerOptions: { overscan: 5 }, // optionally customize the row virtualizer
-		columnVirtualizerOptions: { overscan: 2 }, // optionally customize the column virtualizer
+		rowVirtualizerInstanceRef,
+		rowVirtualizerOptions: ROW_VIRTUALIZER_OPTIONS,
+		columnVirtualizerOptions: COLUMN_VIRTUALIZER_OPTIONS,
 	});
+
 	const rowsFiltered = table.getFilteredRowModel().flatRows.map((v) => v.original);
 	filteredJSON(rowsFiltered);
 
-
-
 	return <MaterialReactTable table={table} />;
-}
+};
 
 export const TableMemorized = React.memo(Table);
-
