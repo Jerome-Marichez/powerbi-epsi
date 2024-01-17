@@ -13,17 +13,13 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (jsonData) {
-      // Update jsonFiltered state after jsonData is set
-      console.log(jsonData);
       setJsonFiltered(jsonFiltered);
-      setLoading(false); // Set loading to false once data is loaded
+      setLoading(false);
     }
   }, [jsonData, jsonFiltered]);
 
-  const handleDataLoad = (data: any) => {
-    setJsonData(data);
-    // Do not setLoading(false) here, it will be done in the useEffect
-  };
+  const handleDataLoad = (data: any) => setJsonData(data);
+
 
   return (
     <>

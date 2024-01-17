@@ -24,9 +24,7 @@ export function Chart({ data }: IChartProps): JSX.Element {
 
 				if (!isNaN(numericValue)) {
 					if (key in result) {
-						result[key].push(
-							{ valeur: obj[key] }
-						);
+						result[key].push({ valeur: obj[key] });
 					} else {
 						result[key] = [{ valeur: obj[key] }];
 					}
@@ -43,8 +41,11 @@ export function Chart({ data }: IChartProps): JSX.Element {
 	// Print the result
 	console.log(accumulatedResult);
 
+
+	// Back to Array to get data ready for Recharts
 	const backtoArray: [string, any[]][] = Object.entries(accumulatedResult);
 
+	// Sort no numeric data
 	backtoArray.forEach(([key, value]) => { value.sort((a, b) => a.valeur - b.valeur); });
 
 	return (
@@ -56,7 +57,7 @@ export function Chart({ data }: IChartProps): JSX.Element {
 
 				return (
 					<div key={index} style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", justifyContent: "space-around" }}>
-						<h2>{key} - Valeur à 50%: <span style={{backgroundColor: "lightgrey", padding:"10px", borderRadius: "50px"}}>{middleValue}</span></h2>
+						<h2>{key} - Valeur à 50%: <span style={{ backgroundColor: "lightgrey", padding: "10px", borderRadius: "50px" }}>{middleValue}</span></h2>
 						<BarChart width={1200} height={400} data={value as any[]}>
 							<Bar dataKey="valeur" fill="lightgreen" />
 							<CartesianGrid stroke="#ccc" />

@@ -22,9 +22,6 @@ const Table: React.FC<TableProps> = ({ jsonData, filteredJSON }) => {
 	const [sorting, setSorting] = useState<MRT_SortingState>([]);
 	const rowVirtualizerInstanceRef = useRef<MRT_Virtualizer<HTMLDivElement, HTMLTableRowElement>>(null);
 
-	const ROW_VIRTUALIZER_OPTIONS = { overscan: 5 };
-	const COLUMN_VIRTUALIZER_OPTIONS = { overscan: 2 };
-
 	useEffect(() => {
 		if (jsonData.length > 0) {
 			setIsLoading(false);
@@ -59,20 +56,21 @@ const Table: React.FC<TableProps> = ({ jsonData, filteredJSON }) => {
 		columns,
 		data: jsonData,
 		defaultDisplayColumn: { enableResizing: true },
-		enableBottomToolbar: false,
+		enableBottomToolbar: true,
 		enableColumnResizing: true,
 		enableColumnVirtualization: true,
 		enableGlobalFilterModes: true,
-		enablePagination: false,
+		enablePagination: true,
+		rowCount: 50,
 		enableColumnPinning: true,
+		enableEditing: true,
 		enableRowNumbers: true,
+		editDisplayMode: "cell",
 		enableRowVirtualization: true,
 		muiTableContainerProps: { sx: { maxHeight: '600px' } },
 		onSortingChange: setSorting,
 		state: { isLoading, sorting },
 		rowVirtualizerInstanceRef,
-		rowVirtualizerOptions: ROW_VIRTUALIZER_OPTIONS,
-		columnVirtualizerOptions: COLUMN_VIRTUALIZER_OPTIONS,
 	});
 
 	const rowsFiltered = table.getFilteredRowModel().flatRows.map((v) => v.original);
