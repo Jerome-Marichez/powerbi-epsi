@@ -60,6 +60,7 @@ const Table: React.FC<TableProps> = ({ jsonData, filteredJSON }) => {
 		enableColumnVirtualization: true,
 		enableGlobalFilterModes: true,
 		enableColumnPinning: true,
+		enablePagination: false,
 		enableEditing: true,
 		enableRowNumbers: true,
 		editDisplayMode: "cell",
